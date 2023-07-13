@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: saleetr/git-jenk-ans-dock-kube-pipe1:latest
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "500Mi"
+          requests:
+            cpu: "100m"
+            memory: "100Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 80
+      nodePort: 30123
+  type: NodePort
+
